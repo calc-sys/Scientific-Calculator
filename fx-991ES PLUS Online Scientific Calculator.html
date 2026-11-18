@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>fx-991ES PLUS Online Scientific Calculator</title><meta name="description" content="Free online scientific calculator modelled on the Casio fx-991ES PLUS: SHIFT, ALPHA A–Z, MODE, STAT, EQN, MATRIX, VECTOR, BASE-N, complex numbers, integrals and graphing.">
+<style>
+:root{--bg:#d9dce6;--lcd:#bcd2bb;--lcdt:#142418;--lcdm:#3f5a47;--case1:#d3d6dc;--case2:#aeb3bc;--kf:#3a3f49;--kft:#fff;--kn:#fbfbfd;--knt:#17171f;--ko:#f39a3b;--shf:#e07b00;--alp:#d3224a;--grn:#1d9a55;--ink:#15131f;--mut:#5d5a72;--card:#f4f5fa;--bd:#c6c9d8;--ac:#4b5bd6;--blue:#5f6bc4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1016;--ink:#ecebf5;--mut:#9a98b3;--card:#191b25;--bd:#2c2f3d;--ac:#7c8bff}}
+:root[data-theme="dark"]{--bg:#0e1016;--ink:#ecebf5;--mut:#9a98b3;--card:#191b25;--bd:#2c2f3d;--ac:#7c8bff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{min-height:100%;background:var(--bg)}
+body{min-height:100vh;margin:0 auto;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:430px;display:flex;flex-direction:column;touch-action:manipulation;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;padding:6px 10px}#brand{margin-right:auto;font:italic 700 15px Georgia,serif}#brand small{display:block;font:500 11px system-ui;color:var(--mut)}
+.ib{border:1px solid var(--bd);background:var(--card);color:var(--ink);font-size:15px;width:34px;height:34px;border-radius:10px;margin-left:6px}
+#case{margin:2px 8px 12px;border-radius:26px 26px 34px 34px;background:linear-gradient(180deg,var(--case1),var(--case2));border-left:9px solid #5b63b5;border-right:9px solid #5b63b5;padding:8px 8px 14px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+#top{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 8px;gap:8px}
+#model{line-height:1.1;color:#1f2b4d}#model b{font:italic 700 17px Georgia,serif}#model small{display:block;font-size:8px;letter-spacing:.6px;color:#2e7d6e;font-weight:700}
+#solar{flex:0 0 112px;height:34px;border-radius:5px;background:linear-gradient(135deg,#2a2c33,#4d4f58 50%,#23252b);border:2px solid #8b8f98}
+#twp{font-size:8px;letter-spacing:.8px;color:#222;font-weight:700;white-space:nowrap}
+#lcdw{background:#7c828c;border-radius:8px;padding:6px}
+#disp{background:var(--lcd);color:var(--lcdt);border-radius:4px;padding:3px 8px 6px;min-height:104px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;position:relative;box-shadow:inset 0 2px 5px rgba(0,0,0,.3);font-family:"Courier New",ui-monospace,monospace}
+#ind{position:absolute;left:6px;right:6px;top:3px;font-size:7.5px;font-weight:700;display:flex;gap:5px;flex-wrap:wrap;font-family:system-ui,sans-serif}
+#ind i{font-style:normal;opacity:.18}#ind i.on{opacity:1}
+#ex{font-size:17px;overflow-wrap:anywhere;text-align:right;min-height:22px;max-width:100%;margin-top:14px;color:var(--lcdt)}
+#cr{display:inline-block;width:2px;height:1em;background:var(--lcdt);vertical-align:text-bottom;animation:bl 1s step-end infinite}
+@keyframes bl{50%{opacity:0}}
+#rs{font-size:36px;font-weight:700;min-height:42px;max-width:100%;overflow-wrap:anywhere;text-align:right;line-height:1.1;cursor:pointer}
+#disp.off>*:not(#ind){visibility:hidden}#disp.off #ind{visibility:hidden}
+#cluster{display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"tl pad tr" "l2 pad r2";gap:2px 6px;margin:6px 0 2px;align-items:end}
+#tl{grid-area:tl}#tr{grid-area:tr}#l2{grid-area:l2}#r2{grid-area:r2}#padw{grid-area:pad;display:flex;justify-content:center}
+.fl{display:flex;gap:6px}.fl .cell{flex:1}
+#pad{position:relative;width:98px;height:98px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#a3aeea,#6472c6 70%);box-shadow:0 2px 0 rgba(0,0,0,.35)}
+#pad button{position:absolute;border:0;background:none;color:#eef0ff;font-size:15px;width:36px;height:32px;padding:0}
+#pad button:active{background:rgba(255,255,255,.25);border-radius:8px}
+#pad span{position:absolute;inset:0;display:grid;place-items:center;font-size:8px;color:#dfe3ff;pointer-events:none;letter-spacing:.5px}
+.grid{display:grid;gap:3px 6px}#sci{grid-template-columns:repeat(6,1fr);margin-top:4px}#num{grid-template-columns:repeat(5,1fr);margin-top:6px}
+.lbl{height:13px;font-size:9px;display:flex;gap:3px;justify-content:center;align-items:flex-end;white-space:nowrap;line-height:1}
+.lbl i{font-style:normal;font-weight:700}.lbl .s{color:var(--shf)}.lbl .a{color:var(--alp)}.lbl .g{color:var(--grn)}.lbl .k{color:#333}
+.cell button{width:100%;border:0;border-radius:7px 7px 11px 11px;min-height:34px;font-size:14px;font-weight:700;background:var(--kf);color:var(--kft);box-shadow:0 2px 0 rgba(0,0,0,.4);padding:0;position:relative}
+#num .cell button{min-height:40px;font-size:20px;border-radius:9px 9px 14px 14px}
+.cell button:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(0,0,0,.4)}
+.cell button.n{background:var(--kn);color:var(--knt)}.cell button.o{background:var(--ko);color:#1a1209}
+.cell button.c{background:linear-gradient(#8e9ae0,#6572c6);color:#fff;border-radius:50%/60%;min-height:28px}
+.cell button.on{outline:3px solid var(--shf)}
+#ov{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;z-index:9;max-width:430px;margin:0 auto;padding-top:env(safe-area-inset-top,0px)}
+#ov.on{display:flex}#oh{display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+#ob{flex:1;overflow:auto;padding:0 14px 24px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px}
+.tabs button,.btn{border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 13px;white-space:nowrap;font-size:14px}
+.tabs .on,.btn.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:11px 4px;border:0;border-bottom:1px solid var(--bd);width:100%;background:none;color:var(--ink);font-size:15px;text-align:left}
+.row small{color:var(--mut)}
+.tb label{display:block;color:var(--mut);font-size:13px;margin:10px 0 4px}
+.tb input,.tb select,.tb textarea{width:100%;border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:10px;padding:9px 11px;font:inherit;min-width:0}
+.g2,.g3,.mg{display:grid;gap:6px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
+.out{margin-top:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:4px 12px}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd);overflow-wrap:anywhere;text-align:right}
+.out div:last-child{border:0}.out span:first-child{color:var(--mut);text-align:left}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ac);color:#fff;padding:7px 14px;border-radius:18px;font-size:14px;opacity:0;pointer-events:none;z-index:20}
+#toast.on{opacity:1}
+#abc{display:none;grid-template-columns:repeat(9,1fr);gap:4px;margin:8px 0 0}#abc.on{display:grid}#abc button{border:0;border-radius:7px;min-height:32px;font:700 15px system-ui;background:var(--alp);color:#fff;box-shadow:0 2px 0 rgba(0,0,0,.35);padding:0}#abc button:active{transform:translateY(1px)}.ah{grid-column:1/-1;font-size:11px;color:#333}#guide{margin:0 8px 28px;font-size:14px;line-height:1.5}#guide h2{font-size:16px;margin:4px 2px 8px}#guide details{border-bottom:1px solid var(--bd);padding:8px 2px}#guide summary{font-weight:600;cursor:pointer}#guide p{color:var(--mut);margin:6px 0}#guide kbd{background:var(--card);border:1px solid var(--bd);border-radius:5px;padding:0 5px;font:inherit;font-size:12px}
+.cell button{background:linear-gradient(#4b515d,#2a2e36);box-shadow:0 2px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.22)}.cell button.n{background:linear-gradient(#fff,#d9dbe4);box-shadow:0 2px 0 rgba(0,0,0,.35),inset 0 1px 0 #fff}.cell button.o{background:linear-gradient(#f7ad57,#e07f1c)}#disp{background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 3px)}#ex{white-space:pre-line}
+</style></head><body>
+<header><div id="brand">fx-991ES PLUS<small>Online scientific calculator</small></div><button class="ib" id="hb" aria-label="History">🕘</button><button class="ib" id="th" aria-label="Theme">🌓</button></header>
+<div id="case">
+ <div id="top"><div id="model"><b>fx-991ES PLUS</b><small>SCIENTIFIC CALCULATOR</small></div><div id="solar"></div><div id="twp">TWO WAY POWER</div></div>
+ <div id="lcdw"><div id="disp"><div id="ind"></div><div id="ex"><span id="el"></span><b id="cr"></b><span id="er"></span></div><div id="rs" title="Tap to copy"></div></div></div>
+ <div id="cluster"><div id="tl" class="fl"></div><div id="padw"><div id="pad"></div></div><div id="tr" class="fl"></div><div id="l2" class="fl"></div><div id="r2" class="fl"></div></div>
+ <div id="sci" class="grid"></div><div id="num" class="grid"></div>
+</div>
+<section id="guide"><h2>How to use it like the real calculator</h2>
+<details open><summary>SHIFT</summary><p>Tap <kbd>SHIFT</kbd>, then a key, to use the orange function printed above it. Example: SHIFT + sin gives sin⁻¹.</p></details>
+<details open><summary>ALPHA and variables</summary><p>Tap <kbd>ALPHA</kbd>, then a key with a red letter above it. ALPHA + hyp types C, ALPHA + CALC types =. To store a result press <kbd>SHIFT</kbd> + <kbd>RCL</kbd> (STO) and then the letter key. To recall, press <kbd>RCL</kbd> and then the letter key.</p></details>
+<details><summary>MODE</summary><p>Tap <kbd>MODE</kbd> to choose COMP, CMPLX, STAT, BASE-N, EQN, MATRIX, TABLE, VECTOR or GRAPH. On a keyboard, press 1 to 9 to pick from the list.</p></details>
+<details><summary>SETUP</summary><p>Tap <kbd>SHIFT</kbd> then <kbd>MODE</kbd> for angle unit, fraction style, Fix / Sci / Norm, engineering notation and complex format.</p></details>
+<details><summary>SOLVE, CONST, CONV, CLR</summary><p>Type an equation with X (ALPHA + ) types X, ALPHA + CALC types =). Press <kbd>SHIFT</kbd> + <kbd>CALC</kbd>, the screen says Solve for X, then press <kbd>=</kbd> to get X and L−R. <kbd>SHIFT</kbd> + <kbd>7</kbd> is CONST (01–40). Type a number, then <kbd>SHIFT</kbd> + <kbd>8</kbd> and a two-digit code for CONV (01–40). <kbd>SHIFT</kbd> + <kbd>9</kbd> is CLR.</p></details>
+<details><summary>Keyboard</summary><p>Type digits, letters and function names such as sin( directly. Enter calculates, Backspace deletes, Esc clears, Shift + P types π.</p></details>
+</section>
+<div id="ov"><div id="oh"><b id="ot"></b><button class="ib" id="oc" aria-label="Close">✕</button></div><div id="ob"></div></div>
+<div id="toast"></div>
+<script>
+let err=false,ang="deg",shift=false,alpha=false,hyp=false,ins=false,eng=false,fracOn=true,fracMixed=true,vib=false,mode="COMP",base=10,off=false,cpolar=false,normTwo=false;
+let ex="",pos=0,lastVal=0,ans=0,fresh=false,forced=null,hi=-1,hist=[],fmtMode="norm",fmtN=4;
+const VN=[..."abcdfghjklmnopqrstuvwxyz","E"],V={};VN.forEach(n=>V[n]=0);
+const NAMES=["asinh","acosh","atanh","sinh","cosh","tanh","asin","acos","atan","sin","cos","tan","ln","log","logb","exp","sqrt","cbrt","root","abs","floor","ceil","round","ncr","npr","mod","gcd","lcm","ans","int","ddx","sum","pol","rec","ranint","rnd","arg","conjg","re","im"].sort((a,b)=>b.length-a.length);
+const RX=new RegExp("\\d+\\.?\\d*|\\.\\d+|"+NAMES.join("|")+"|[a-zA-Z]|[π√∠]|[-+*/^()!%,]","g");
+const DELRX=new RegExp("(?:"+NAMES.join("|")+")\\($|ans$|npr$|ncr$|xnor$|xor$|and$|or$|not\\($|neg\\($|[\\s\\S]$");
+function gamma(z){if(z<.5)return Math.PI/(Math.sin(Math.PI*z)*gamma(1-z));z-=1;const C=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];let x=C[0];const t=z+7.5;for(let i=1;i<9;i++)x+=C[i]/(z+i);return Math.sqrt(2*Math.PI)*Math.pow(t,z+.5)*Math.exp(-t)*x}
+function fact(n){if(n%1===0){if(n<0||n>170)throw 0;let r=1;for(let k=2;k<=n;k++)r*=k;return r}const g=gamma(n+1);if(!isFinite(g))throw 0;return g}
+const isInt=x=>Number.isInteger(x);
+function ncr(n,r){if(!isInt(n)||!isInt(r)||n<0||r<0||r>n)throw 0;r=Math.min(r,n-r);let v=1;for(let i=1;i<=r;i++)v=v*(n-r+i)/i;return Math.round(v)}
+function npr(n,r){if(!isInt(n)||!isInt(r)||n<0||r<0||r>n)throw 0;let v=1;for(let i=0;i<r;i++)v*=n-i;return v}
+function gcd(a,b){if(!isInt(a)||!isInt(b))throw 0;a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a}
+const toR=x=>ang==="deg"?x*Math.PI/180:ang==="grad"?x*Math.PI/200:x,fromR=x=>ang==="deg"?x*180/Math.PI:ang==="grad"?x*200/Math.PI:x,z0=x=>Math.abs(x)<1e-12?0:x;
+const F={sin:x=>z0(Math.sin(toR(x))),cos:x=>z0(Math.cos(toR(x))),tan:x=>{const q=ang==="deg"?180:ang==="grad"?200:null;if(q&&Math.abs(x%q)===q/2)throw 0;return z0(Math.tan(toR(x)))},
+ asin:x=>fromR(Math.asin(x)),acos:x=>fromR(Math.acos(x)),atan:x=>fromR(Math.atan(x)),sinh:Math.sinh,cosh:Math.cosh,tanh:Math.tanh,asinh:Math.asinh,acosh:Math.acosh,atanh:Math.atanh,
+ ln:Math.log,log:Math.log10,logb:(b,x)=>Math.log(x)/Math.log(b),exp:Math.exp,sqrt:Math.sqrt,cbrt:Math.cbrt,abs:Math.abs,floor:Math.floor,ceil:Math.ceil,round:Math.round,
+ root:(n,x)=>n%2===1&&x<0?-Math.pow(-x,1/n):Math.pow(x,1/n),ncr,npr,mod:(a,b)=>{if(!b)throw 0;return((a%b)+b)%b},gcd,lcm:(a,b)=>{const g=gcd(a,b);return g?Math.abs(a*b)/g:0},
+ ranint:(a,b)=>a+Math.floor(Math.random()*(b-a+1)),rnd:x=>fmtMode==="fix"?+x.toFixed(fmtN):parseFloat(x.toPrecision(10)),
+ arg:x=>x>=0?0:fromR(Math.PI),conjg:x=>x,re:x=>x,im:()=>0,
+ pol:(x,y)=>{const r=Math.hypot(x,y);V.y=fromR(Math.atan2(y,x));V.x=r;return r},rec:(r,t)=>{V.y=r*Math.sin(toR(t));V.x=r*Math.cos(toR(t));return V.x}};
+const R_O={num:x=>Array.isArray(x)?x[0]:x,add:(a,b)=>a+b,sub:(a,b)=>a-b,mul:(a,b)=>a*b,div:(a,b)=>a/b,neg:a=>-a,pow:Math.pow,pct:a=>a/100,fact,sqrt:Math.sqrt};
+const ce=z=>{const m=Math.exp(z[0]);return[m*Math.cos(z[1]),m*Math.sin(z[1])]},cl=z=>{if(!z[0]&&!z[1])throw 0;return[Math.log(Math.hypot(z[0],z[1])),Math.atan2(z[1],z[0])]};
+const C_O={num:x=>Array.isArray(x)?x:[x,0],add:(a,b)=>[a[0]+b[0],a[1]+b[1]],sub:(a,b)=>[a[0]-b[0],a[1]-b[1]],mul:(a,b)=>[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]],
+ div:(a,b)=>{const d=b[0]*b[0]+b[1]*b[1];if(!d)throw 0;return[(a[0]*b[0]+a[1]*b[1])/d,(a[1]*b[0]-a[0]*b[1])/d]},neg:a=>[0-a[0],0-a[1]],pct:a=>[a[0]/100,a[1]/100],
+ fact:a=>{if(a[1])throw 0;return[fact(a[0]),0]},sqrt:z=>{const r=Math.hypot(z[0],z[1]),t=Math.atan2(z[1],z[0])/2,m=Math.sqrt(r);return[m*Math.cos(t),m*Math.sin(t)]},
+ pow:(a,b)=>{if(b[1]===0&&Number.isInteger(b[0])&&Math.abs(b[0])<=64){let r=[1,0];for(let k=0;k<Math.abs(b[0]);k++)r=C_O.mul(r,a);return b[0]<0?C_O.div([1,0],r):r}if(!a[0]&&!a[1]){if(b[1]===0&&b[0]>0)return[0,0];throw 0}return ce(C_O.mul(b,cl(a)))}};
+const FC={sqrt:C_O.sqrt,exp:ce,ln:cl,log:z=>{const l=cl(z);return[l[0]/Math.LN10,l[1]/Math.LN10]},sin:z=>[Math.sin(toR(z[0]))*Math.cosh(z[1]),Math.cos(toR(z[0]))*Math.sinh(z[1])],cos:z=>[Math.cos(toR(z[0]))*Math.cosh(z[1]),-Math.sin(toR(z[0]))*Math.sinh(z[1])],
+ abs:z=>[Math.hypot(z[0],z[1]),0],arg:z=>[fromR(Math.atan2(z[1],z[0])),0],conjg:z=>[z[0],-z[1]],re:z=>[z[0],0],im:z=>[z[1],0]};
+function calc(s){
+ s=s.replace(/(\d+)⌟(\d+)⌟(\d+)/g,"($1+$2/$3)").replace(/(\d+(?:\.\d+)?)°(?:(\d+(?:\.\d+)?)′)?(?:(\d+(?:\.\d+)?)″)?/g,(m,d,mi,se)=>"("+d+"+"+(mi||0)+"/60+"+(se||0)+"/3600)");
+ const src=s.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/\s/g,"");
+ const T=src.match(RX)||[];if(T.join("").length!==src.length)throw"S";
+ const cm=mode==="CMPLX",O=cm?C_O:R_O,Fn=cm?FC:F;
+ let i=0;const pk=()=>T[i],nx=()=>T[i++];
+ const st=t=>t&&(/^[\d.]/.test(t)||/^[a-zA-Zπ√(]/.test(t));
+ function lazy(t){if(cm||nx()!=="(")throw 0;const A=[];let dp=0,cu=[];
+  while(i<T.length){const q=nx();if(q==="("){dp++;cu.push(q)}else if(q===")"){if(!dp)break;dp--;cu.push(q)}else if(q===","&&!dp){A.push(cu.join(""));cu=[]}else cu.push(q)}
+  A.push(cu.join(""));const f=xv=>{const o=V.x;V.x=xv;try{return calc(A[0])}finally{V.x=o}};
+  if(t==="int"){if(A.length<3)throw"S";const a=calc(A[1]),b=calc(A[2]),n=2000,h=(b-a)/n;let q=f(a)+f(b);for(let k=1;k<n;k++)q+=f(a+k*h)*(k%2?4:2);return q*h/3}
+  if(t==="ddx"){if(A.length<2)throw"S";const a=calc(A[1]),h=1e-5*Math.max(1,Math.abs(a));return(f(a+h)-f(a-h))/(2*h)}
+  if(A.length<3)throw"S";const a=Math.ceil(calc(A[1])),b=Math.floor(calc(A[2]));if(b-a>200000)throw 0;let q=0;for(let k=a;k<=b;k++)q+=f(k);return q}
+ function expr(){let v=term();while(pk()==="+"||pk()==="-"){const o=nx(),r=term();v=o==="+"?O.add(v,r):O.sub(v,r)}return v}
+ function term(){let v=un();for(;;){const t=pk();if(t==="*"){nx();v=O.mul(v,un())}else if(t==="/"){nx();let d=un();while(st(pk())&&pk()!=="npr"&&pk()!=="ncr")d=O.mul(d,pw());v=O.div(v,d)}else if((t==="npr"||t==="ncr")&&!cm){nx();v=F[t](v,pw())}
+  else if(t==="∠"&&cm){nx();const r=un(),th=toR(r[0]);v=[v[0]*Math.cos(th),v[0]*Math.sin(th)]}else if(st(t))v=O.mul(v,pw());else break}return v}
+ function un(){if(pk()==="-"){nx();return O.neg(un())}if(pk()==="+"){nx();return un()}return pw()}
+ function pw(){const b=post();if(pk()==="^"){nx();return O.pow(b,un())}return b}
+ function post(){let v=prim();for(;;){if(pk()==="!"){nx();v=O.fact(v)}else if(pk()==="%"){nx();v=O.pct(v)}else break}return v}
+ function prim(){const t=nx();if(t===undefined)throw"S";
+  if(/^[\d.]/.test(t))return O.num(parseFloat(t));
+  if(t==="("){const v=expr();if(pk()===")")nx();return v}
+  if(t==="π")return O.num(Math.PI);if(t==="e")return O.num(Math.E);if(t==="ans")return O.num(ans);
+  if(t==="i"){if(!cm)throw"S";return[0,1]}
+  if(t==="√"){const v=pw();return O.sqrt(v)}
+  if(t==="int"||t==="ddx"||t==="sum")return lazy(t);
+  if(t in V)return O.num(V[t]);
+  if(Fn[t]){if(nx()!=="(")throw"S";const a=[expr()];while(pk()===","){nx();a.push(expr())}if(pk()===")")nx();return Fn[t](...a)}
+  throw"S"}
+ const v=expr();if(i<T.length)throw"S";return v}
+function baseCalc(e){const src=e.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/\s/g,"");
+ const T=src.match(/xnor|xor|and|or|not|neg|[0-9A-F]+|[-+*\/()]/g)||[];if(T.join("").length!==src.length)throw"S";
+ let i=0;const pk=()=>T[i],nx=()=>T[i++],W=x=>x|0;
+ const num=t=>{if(t.split("").some(ch=>parseInt(ch,16)>=base))throw"S";return W(parseInt(t,base))};
+ function orx(){let v=andx();while(pk()==="or"||pk()==="xor"||pk()==="xnor"){const o=nx(),r=andx();v=o==="or"?v|r:o==="xor"?v^r:~(v^r)}return v}
+ function andx(){let v=add();while(pk()==="and"){nx();v=v&add()}return v}
+ function add(){let v=mul();while(pk()==="+"||pk()==="-"){const o=nx(),r=mul();v=W(o==="+"?v+r:v-r)}return v}
+ function mul(){let v=un();while(pk()==="*"||pk()==="/"){const o=nx(),r=un();if(o==="/"){if(!r)throw 0;v=W(Math.trunc(v/r))}else v=W(Math.imul(v,r))}return v}
+ function un(){const t=pk();if(t==="-"){nx();return W(-un())}if(t==="not"||t==="neg"){nx();const v=un();return t==="not"?~v:W(-v)}return prim()}
+ function prim(){const t=nx();if(t===undefined)throw"S";if(t==="("){const v=orx();if(pk()===")")nx();return v}if(/^[0-9A-F]+$/.test(t))return num(t);throw"S"}
+ const v=orx();if(i<T.length)throw"S";return v}
+const chk=v=>{if(Array.isArray(v)){if(!isFinite(v[0])||!isFinite(v[1]))throw 0;return[z0(v[0]),z0(v[1])]}if(typeof v!=="number"||!isFinite(v))throw 0;return v};
+function evalEx(e){if(mode==="BASE")return baseCalc(e);const parts=e.split(":"),sa=ans;try{let v;for(let k=0;k<parts.length;k++){v=chk(calc(parts[k]));if(k<parts.length-1)ans=v}return v}finally{ans=sa}}
+const sciStr=s=>s.replace(/e\+?(-?\d+)/,"×10^($1)");
+const normStr=v=>sciStr(String(parseFloat(v.toPrecision(12))));
+const vstr=v=>Array.isArray(v)?"("+normStr(v[0])+(v[1]<0?"-":"+")+normStr(Math.abs(v[1]))+"i)":normStr(v);
+function disp(v){if(eng&&v!==0){const e=Math.floor(Math.log10(Math.abs(v))/3)*3;return String(parseFloat((v/Math.pow(10,e)).toPrecision(10)))+"×10^"+e}
+ if(fmtMode==="fix")return v.toFixed(fmtN);if(fmtMode==="sci")return sciStr(v.toExponential(fmtN));
+ const a=Math.abs(v);if(a!==0&&(a>=1e10||a<(normTwo?1e-9:1e-2)))return sciStr(v.toExponential(9).replace(/\.?0+e/,"e"));return String(parseFloat(v.toPrecision(10)))}
+function cfmt(z){const re=Math.abs(z[0])<1e-12?0:z[0],im=Math.abs(z[1])<1e-12?0:z[1];
+ if(cpolar)return disp(Math.hypot(re,im))+"∠"+disp(fromR(Math.atan2(im,re)));if(!im)return disp(re);
+ const is=(Math.abs(im)===1?"":disp(Math.abs(im)))+"i";if(!re)return(im<0?"-":"")+is;return disp(re)+(im<0?" − ":" + ")+is}
+function frac(v){if(!isFinite(v)||v%1===0)return null;const sg=v<0?-1:1,x=Math.abs(v);let h1=1,h0=0,k1=0,k0=1,b=x;for(let i=0;i<24;i++){const a=Math.floor(b),h=a*h1+h0,k=a*k1+k0;h0=h1;h1=h;k0=k1;k1=k;if(Math.abs(x-h1/k1)<1e-10*Math.max(1,x)||k1>10000)break;b=1/(b-a);if(!isFinite(b))break}
+ if(k1>10000||Math.abs(x-h1/k1)>1e-9*Math.max(1,x))return null;const w=Math.floor(h1/k1),r=h1%k1,m=sg<0?"-":"";return{imp:m+h1+"/"+k1,mix:w&&r?m+w+"⌟"+r+"⌟"+k1:null}}
+const baseStr=(v,b)=>b===10?String(v|0):(v>>>0).toString(b).toUpperCase();
+function bigOf(v){if(mode==="BASE")return baseStr(v,base);if(Array.isArray(v))return cfmt(v);const f=fracOn&&frac(v);return f?(fracMixed&&f.mix?f.mix:f.imp):disp(v)}
+function dmsStr(v){const a=Math.abs(v),D=Math.trunc(a),M=Math.trunc((a-D)*60+1e-9),S=((a-D)*60-M)*60;return(v<0?"-":"")+D+"°"+M+"′"+String(parseFloat(S.toPrecision(8)))+"″"}
+function solveEq(e){if(mode!=="COMP")throw 0;const p=e.split("=");if(p.length!==2||!p[0]||!p[1])throw"S";const f=v=>{V.x=v;return calc(p[0])-calc(p[1])};
+ for(const g of[V.x||1,1,-1,.5,2,-2,5,-5,10,-10,100,-100,.1,-.1,0]){let x=g;try{for(let k=0;k<80;k++){const y=f(x),h=1e-6*(1+Math.abs(x)),d=(f(x+h)-f(x-h))/(2*h);if(!isFinite(d)||d===0)break;const n2=x-y/d;if(Math.abs(n2-x)<1e-13*(1+Math.abs(x))){x=n2;if(Math.abs(f(x))<1e-8*(1+Math.abs(x)))return x;break}x=n2}}catch(er){}}throw 0}
+/*UI*/
+const $=id=>document.getElementById(id);
+const SCI=[
+["▯/▯","i:÷","▯⌟▯","i:⌟"],["√▯","f:sqrt","³√▯","f:cbrt"],["x²","i:^2","x³","i:^3","","","","DEC"],["x▪","i:^","▪√▪","f:root","","","","HEX"],["log","f:log","10▪","i:10^(","","","","BIN"],["ln","f:ln","e▪","f:exp","","","","OCT"],
+["(−)","i:-","∠","i:∠","","A","i:a"],["°′″","dms","←","todms","","B","i:b"],["hyp","hyp","Abs","f:abs","","C","i:c"],["sin","t:sin","sin⁻¹","t:asin","","D","i:d"],["cos","t:cos","cos⁻¹","t:acos","","E","i:E"],["tan","t:tan","tan⁻¹","t:atan","","F","i:f"],
+["RCL","rcl","STO","sto"],["ENG","eng","←","","","i","i:i"],["(","i:(","","","","%","i:%"],[")","i:)",",","i:,","","X","i:x"],["S⇔D","sd","a b/c⇔d/c","sd2","","Y","i:y"],["M+","m+","M−","m-","","M","i:m"]];
+const NUM=[
+["7","i:7","CONST","tools:Const"],["8","i:8","CONV","tools:Conv"],["9","i:9","CLR","clr"],["DEL","del","INS","ins","o"],["AC","ac","OFF","off","o"],
+["4","i:4","MATRIX","tools:Matrix"],["5","i:5","VECTOR","tools:Vector"],["6","i:6"],["×","i:×","nPr","i:npr"],["÷","i:÷","nCr","i:ncr"],
+["1","i:1","STAT","tools:Stats"],["2","i:2","CMPLX","menu:cmplx"],["3","i:3","BASE","menu:base"],["+","i:+","Pol","f:pol"],["−","i:-","Rec","f:rec"],
+["0","i:0","Rnd","f:rnd"],[".","i:.","Ran#","ran","","RanInt","f:ranint"],["×10ˣ","i:×10^(","π","i:π","","e","i:e"],["Ans","i:ans","DRG►","drg"],["=","eq"]];
+const G_TL=[["SHIFT","shift","","","c"],["ALPHA","alpha","","","c"]],G_TR=[["MODE","mode","SETUP","setup","c"],["ON","on","","","c"]],G_PAD=[["▲","up"],["▼","down"],["◀","left"],["▶","right"]],G_L2=[["CALC","calc","SOLVE","solve","","=","i:="],["∫▯","f:int","d/dx","f:ddx","","︰","i::"]],G_R2=[["x⁻¹","i:^(-1)","x!","i:!"],["logₐ▯","f:logb","Σ▪","f:sum"]];
+const KEYS=[...G_TL,...G_TR,...G_PAD,...G_L2,...G_R2,...SCI,...NUM];
+function cell(k,i,base){const c=k[4]||base,lb=(k[2]?'<i class="s">'+k[2]+'</i>':"")+(k[7]?'<i class="g">'+k[7]+'</i>':"")+(k[5]?'<i class="a">'+k[5]+'</i>':"");
+ return'<div class="cell"><span class="lbl">'+lb+'</span><button data-i="'+i+'" class="'+c+'">'+k[0]+'</button></div>'}
+let off0=0;function build(arr,id,base){let h="";arr.forEach((k,j)=>{h+=cell(k,off0+j,base)});$(id).innerHTML=h;off0+=arr.length}
+build(G_TL,"tl","f");build(G_TR,"tr","f");
+{let h="";G_PAD.forEach((k,j)=>{h+='<button data-i="'+(off0+j)+'" style="'+["top:3px;left:31px","bottom:3px;left:31px","left:3px;top:33px","right:3px;top:33px"][j]+'">'+k[0]+'</button>'});$("pad").innerHTML=h+"<span>REPLAY</span>";off0+=4}
+build(G_L2,"l2","f");build(G_R2,"r2","f");build(SCI,"sci","f");build(NUM,"num","n");
+const btnShift=()=>$("tl").querySelector("button"),btnAlpha=()=>$("tl").querySelectorAll("button")[1];
+$("case").onclick=e=>{const b=e.target.closest&&e.target.closest("button");if(b&&b.dataset.i!==undefined)press(+b.dataset.i)};
+let pend=null,solv=null;const CTRL=new Set(["shift","alpha","on","mode","left","right","up","down","eq","ac","del"]);
+function press(i){const k=KEYS[i];if(off){if(k[1]==="on"){off=false;show()}return}
+ if(solv){const q=k[1];shift=alpha=false;
+  if(solv.res!==undefined){solv=null;if(q==="ac"||q==="eq"){show();return}}
+  else{if(q==="ac")solv=null;else if(q==="del")solv.g=solv.g.slice(0,-1);else if(/^i:[\d.]$/.test(q)||q==="i:-")solv.g+=q.slice(2);
+   else if(q==="eq"){const e2=solv.eq.includes("=")?solv.eq:solv.eq+"=0",g=parseFloat(solv.g);if(!isNaN(g))V.x=g;
+    try{const x=solveEq(e2),pp=e2.split("=");V.x=x;solv.res=x;solv.lr=calc(pp[0])-calc(pp[1]);ans=lastVal=x;hist.unshift({e:solv.eq,r:"X = "+N6(x),v:x});hist=hist.slice(0,50);save()}catch(er){solv=null;err="Can't Solve"}}
+   show();return}}
+ if(pend){const kk=k[6]||"",L=kk.slice(2),m=pend;pend=null;shift=alpha=false;if(/^i:[a-df-hj-zE]$/.test(kk)){if(m==="sto"){const v=cur();if(v!==null){V[L]=v;save();toast(L.toUpperCase()+" stored: "+N6(re0(v)))}}else put(L)}else toast("Cancelled");show();return}
+ let id=k[1];
+ if(mode==="BASE"&&!shift&&!alpha&&(k[7]||(k[6]&&/^[A-F]$/.test(k[5]))))id=k[7]?"base:"+k[7]:k[6];
+ else if(alpha&&k[6])id=k[6];else if(shift&&k[3])id=k[3];else if((alpha||shift)&&!CTRL.has(k[1])){toast(alpha?"No ALPHA letter on this key":"No SHIFT function on this key");shift=alpha=false;show();return}
+ if(vib&&navigator.vibrate)navigator.vibrate(6);err=false;forced=null;
+ const keep=id==="shift"||id==="alpha";run(id);if(!keep){shift=false;alpha=false}show()}
+function put(s){if(fresh){if(/^[\d.π(a-zA-Z√]/.test(s)&&s!=="npr"&&s!=="ncr"&&s!=="and"&&s!=="or"&&s!=="xor"&&s!=="xnor"){ex="";pos=0}else pos=ex.length;fresh=false}
+ if(ins&&pos<ex.length)ex=ex.slice(0,pos)+ex.slice(pos+1);ex=ex.slice(0,pos)+s+ex.slice(pos);pos+=s.length;hi=-1}
+function cur(){try{return ex?evalEx(ex):lastVal}catch(e){return fresh?lastVal:null}}
+const re0=v=>Array.isArray(v)?v[0]:v;
+function unfresh(){if(fresh&&hist[0]){ex=hist[0].e;pos=ex.length}fresh=false}
+function setMode(m){mode=m;ex="";pos=0;fresh=false;hi=-1;forced=null;if(m==="BASE")base=10;ans=0;lastVal=0;toast(m==="COMP"?"COMP":m==="CMPLX"?"CMPLX mode (use i)":"BASE-N mode")}
+function run(k){
+ const c=k.indexOf(":"),h=c>0?k.slice(0,c):"",r=c>0?k.slice(c+1):"";
+ if(h==="i")return put(mode==="BASE"&&/^[a-f]$/.test(r)?r.toUpperCase():r);if(h==="f")return put(r+"(");
+ if(h==="t"){const n=r+(hyp?"h":"");hyp=false;return put(n+"(")}
+ if(h==="tools")return tools(r);
+ if(h==="menu")return insMenu(r);
+ if(h==="base"){base={DEC:10,HEX:16,BIN:2,OCT:8}[r];if(fresh)ex=baseStr(lastVal,base);return}
+ switch(k){
+ case"shift":shift=!shift;alpha=false;break;
+ case"alpha":alpha=!alpha;shift=false;break;
+ case"on":ex="";pos=0;fresh=false;hi=-1;shift=alpha=false;break;
+ case"off":off=true;break;
+ case"left":unfresh();pos=Math.max(0,pos-1);break;
+ case"right":unfresh();pos=Math.min(ex.length,pos+1);break;
+ case"up":if(hist.length){hi=Math.min(hi+1,hist.length-1);ex=hist[hi].e;pos=ex.length;fresh=false}break;
+ case"down":if(hi>0){hi--;ex=hist[hi].e;pos=ex.length}else{hi=-1;ex="";pos=0}fresh=false;break;
+ case"mode":modeMenu();break;
+ case"setup":tools("Display");break;
+ case"hyp":hyp=!hyp;break;
+ case"eng":eng=!eng;save();break;
+ case"sd":fracOn=!fracOn;save();break;
+ case"sd2":fracMixed=!fracMixed;fracOn=true;save();break;
+ case"ac":ex="";pos=0;fresh=false;hi=-1;break;
+ case"del":if(fresh){ex="";pos=0;fresh=false;break}{const L=ex.slice(0,pos).replace(DELRX,"");ex=L+ex.slice(pos);pos=L.length}break;
+ case"ins":ins=!ins;break;
+ case"dms":{const t=(ex.slice(0,pos).match(/[\d.°′″]+$/)||[""])[0];put(!t.includes("°")?"°":!t.includes("′")?"′":"″");break}
+ case"todms":{const v=cur();if(v!==null&&!Array.isArray(v))forced=dmsStr(v);break}
+ case"ran":put(String(Math.floor(Math.random()*1000)/1000));break;
+ case"m+":case"m-":{const v=cur();if(v!==null){V.m+=k==="m+"?re0(v):-re0(v);save();toast("M = "+N6(V.m))}break}
+ case"sto":case"rcl":pend=k;toast((k==="sto"?"STO":"RCL")+": press a key with a red letter (A–F, X, Y, M)");break;
+ case"calc":calcKey();break;case"solve":if(!ex){toast("Type an expression with X first");break}if(mode!=="COMP"){toast("SOLVE works in COMP mode");break}solv={eq:ex,g:""};break;
+ case"drg":drgPop();break;
+ case"clr":clrPop();break;
+ case"eq":{if(!ex)break;
+  try{if(mode==="COMP"&&ex.includes("=")){const sol=solveEq(ex);V.x=sol;ans=lastVal=sol;forced="x = "+disp(sol);hist.unshift({e:ex,r:forced,v:sol});hist=hist.slice(0,50);break}
+   const v=evalEx(ex);hist.unshift({e:ex,r:bigOf(v),v});hist=hist.slice(0,50);ans=lastVal=v;if(/pol\(|rec\(/.test(ex))toast("X = "+N6(V.x)+"   Y = "+N6(V.y));
+   ex=mode==="BASE"?baseStr(v,base):vstr(v);pos=ex.length;fresh=true;hi=-1}
+  catch(e){err=e==="S"?"Syntax ERROR":"Math ERROR"}break}
+ }}
+const IND=[["S",()=>shift],["A",()=>alpha],["M",()=>V.m!==0],["STO",()=>pend==="sto"],["RCL",()=>pend==="rcl"],["STAT",()=>false],["CMPLX",()=>mode==="CMPLX"],["MAT",()=>false],["VCT",()=>false],["D",()=>ang==="deg"],["R",()=>ang==="rad"],["G",()=>ang==="grad"],["FIX",()=>fmtMode==="fix"],["SCI",()=>fmtMode==="sci"],["Math",()=>fracOn],["▼▲",()=>false],["Disp",()=>false],["HYP",()=>hyp],["ENG",()=>eng],["INS",()=>ins]];
+const dsp=t=>t.replace(RX,m=>/^[a-df-hj-z]$/.test(m)?m.toUpperCase():m);
+function show(){
+ $("disp").classList.toggle("off",off);
+ let ih=IND.map(([n,f])=>"<i"+(f()?' class="on"':"")+">"+n+"</i>").join("");if(mode==="BASE")ih+='<i class="on">'+{10:"DEC",16:"HEX",2:"BIN",8:"OCT"}[base]+"</i>";$("ind").innerHTML=ih;
+ let big="";
+ if(fresh){$("el").textContent=hist[0]?dsp(hist[0].e)+" =":"";$("er").textContent="";$("cr").style.display="none";big=bigOf(lastVal)}
+ else{$("el").textContent=dsp(ex.slice(0,pos));$("er").textContent=dsp(ex.slice(pos));$("cr").style.display="";big=ex?"":"0";
+  if(ex&&!/int\(|sum\(|ddx\(|=/.test(ex))try{big=bigOf(evalEx(ex))}catch(e){}}
+ if(forced!==null)big=forced;if(err)big=err;
+ if(solv){$("cr").style.display="none";$("er").textContent="";if(solv.res===undefined){$("el").textContent="Solve for X";big=solv.g||N6(V.x)}else{$("el").textContent=dsp(solv.eq)+"\nL−R= "+N6(solv.lr);big="X= "+N6(solv.res)}}
+ const R=$("rs");R.textContent=big;R.style.fontSize=big.length>20?"20px":big.length>13?"27px":"36px";
+ btnShift().classList.toggle("on",shift);btnAlpha().classList.toggle("on",alpha)}
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),1400)}
+$("rs").onclick=()=>{const t=$("rs").textContent;if(!t)return;try{navigator.clipboard.writeText(t).then(()=>toast("Copied"),()=>toast("Copy not allowed here"))}catch(e){toast("Copy not allowed here")}};
+function openOv(t,node){$("ot").textContent=t;$("ob").innerHTML="";$("ob").appendChild(node);$("ov").classList.add("on")}
+const closeOv=()=>$("ov").classList.remove("on");$("oc").onclick=closeOv;
+function el(h){const d=document.createElement("div");d.innerHTML=h;return d}
+const N6=v=>isFinite(v)?String(parseFloat(v.toPrecision(10))):"—";
+function save(){try{localStorage.setItem("sces2",JSON.stringify({V,ang,fmtMode,fmtN,eng,vib,fracOn,fracMixed,cpolar,normTwo}))}catch(e){}}
+try{const o=JSON.parse(localStorage.getItem("sces2")||"null");if(o){Object.assign(V,o.V);ang=o.ang||ang;fmtMode=o.fmtMode||fmtMode;fmtN=o.fmtN??fmtN;eng=!!o.eng;vib=!!o.vib;fracOn=o.fracOn??fracOn;fracMixed=o.fracMixed??fracMixed;cpolar=!!o.cpolar;normTwo=!!o.normTwo}}catch(e){}
+function menuList(title,items){const w=document.createElement("div");items.forEach(([n,f])=>{const b=document.createElement("button");b.className="row";b.textContent=n;b.onclick=()=>{closeOv();f();show()};w.appendChild(b)});openOv(title,w)}
+function modeMenu(){menuList("MODE",[["1  COMP (normal calculation)",()=>setMode("COMP")],["2  CMPLX (complex numbers)",()=>setMode("CMPLX")],["3  STAT (statistics)",()=>tools("Stats")],["4  BASE-N (binary / hex / octal)",()=>setMode("BASE")],["5  EQN (equations)",()=>tools("Solve")],["6  MATRIX",()=>tools("Matrix")],["7  TABLE",()=>tools("Table")],["8  VECTOR",()=>tools("Vector")],["9  GRAPH (plot y = f(x))",()=>tools("Graph")]])}
+function insMenu(k){const A=k==="cmplx"?[["Arg( )","arg("],["Conjg( )","conjg("],["Re( )","re("],["Im( )","im("],["i  (imaginary unit)","i"],["∠  (polar entry)","∠"]]:[["and","and"],["or","or"],["xor","xor"],["xnor","xnor"],["Not( )","not("],["Neg( )","neg("]];menuList(k==="cmplx"?"CMPLX":"BASE logic",A.map(([n,s])=>[n,()=>put(s)]))}
+function varPop(k){const w=el('<div class="tb"><label>'+(k==="sto"?"Store current value in":"Insert variable")+'</label><div class="g3" id="vg"></div></div>');
+ VN.forEach(n=>{const b=document.createElement("button");b.className="btn";b.textContent=n.toUpperCase()+" = "+(Array.isArray(V[n])?N6(V[n][0])+"+i":N6(V[n]));
+  b.onclick=()=>{if(k==="sto"){const v=cur();if(v!==null){V[n]=v;save();toast(n.toUpperCase()+" stored")}}else put(n);closeOv();show()};w.querySelector("#vg").appendChild(b)});
+ openOv(k==="sto"?"STO":"RCL",w)}
+function calcKey(){const used=[...new Set((ex.replace(/⌟|°|′|″/g,"").replace(/×/g,"*").replace(/÷/g,"/").match(RX)||[]).filter(t=>t in V))];
+ const done=()=>{try{const v=evalEx(ex);ans=lastVal=v;forced=bigOf(v);hist.unshift({e:ex,r:forced,v})}catch(e){err=e==="S"?"Syntax ERROR":"Math ERROR"}show()};
+ if(!used.length){done();return}
+ const w=el('<div class="tb"><label>Enter values</label><div id="cf"></div><button class="btn p" id="cg" style="margin-top:12px">Calculate</button></div>');
+ used.forEach(n=>{const d=el('<label>'+n.toUpperCase()+' =</label><input type="number" inputmode="decimal" data-v="'+n+'" value="'+N6(re0(V[n]))+'">');w.querySelector("#cf").append(...d.childNodes)});
+ w.querySelector("#cg").onclick=()=>{w.querySelectorAll("input").forEach(i=>{const v=parseFloat(i.value);if(!isNaN(v))V[i.dataset.v]=v});save();closeOv();done()};openOv("CALC",w)}
+function drgPop(){let v=cur();if(v===null)return;v=re0(v);const d=ang==="deg"?v:ang==="rad"?v*180/Math.PI:v*.9,w=el('<div class="tb"><label>Convert '+N6(v)+" "+ang+" to:</label></div>");
+ [["Degrees (°)",d],["Radians (rad)",d*Math.PI/180],["Gradians (grad)",d/.9]].forEach(([n,x])=>{const b=document.createElement("button");b.className="row";b.innerHTML="<span></span><b></b>";b.children[0].textContent=n;b.children[1].textContent=N6(x);b.onclick=()=>{ex=normStr(x);pos=ex.length;fresh=true;lastVal=x;closeOv();show()};w.appendChild(b)});openOv("DRG►",w)}
+function clrPop(){const w=el('<div class="tb"></div>'),reset=()=>{ang="deg";fmtMode="norm";fmtN=4;eng=false;fracOn=true;fracMixed=true;vib=false;cpolar=false;normTwo=false;mode="COMP"},mem=()=>{VN.forEach(n=>V[n]=0);ans=lastVal=0};
+ [["1  Setup: restore default settings (COMP, Deg, Norm 1, MthIO)",reset],["2  Memory: clear A to Z, M and Ans",mem],["3  All: settings, memory and history",()=>{reset();mem();hist=[];hi=-1;ex="";pos=0;fresh=false}]].forEach(([n,f])=>{const b=document.createElement("button");b.className="row";b.textContent=n;b.onclick=()=>{f();save();closeOv();toast("Done");show()};w.appendChild(b)});openOv("CLR",w)}
+$("hb").onclick=()=>{const w=document.createElement("div");if(!hist.length)w.textContent="No history yet.";
+ hist.forEach(h=>{const b=document.createElement("button");b.className="row";b.innerHTML="<small></small><b></b>";b.children[0].textContent=h.e;b.children[1].textContent="= "+h.r;b.onclick=()=>{ex=mode==="BASE"?baseStr(h.v,base):vstr(h.v);lastVal=h.v;pos=ex.length;fresh=true;closeOv();show()};w.appendChild(b)});openOv("History",w)};
+$("th").onclick=()=>{const r=document.documentElement;const dark=getComputedStyle(r).getPropertyValue("--bg").trim()==="#0e1016";r.setAttribute("data-theme",dark?"light":"dark")};
+document.addEventListener("keydown",e=>{const k=e.key;if($("ov").classList.contains("on")){if(k==="Escape")closeOv();else if(/^[1-9]$/.test(k)&&["MODE","CLR"].includes($("ot").textContent)){const r=$("ob").querySelectorAll(".row")[+k-1];if(r)r.click()}return}if(off)return;
+ if(/^[\d.+\-*\/^()!%,=]$/.test(k)){e.preventDefault();put(k==="*"?"×":k==="/"?"÷":k)}
+ else if(k==="Enter"){e.preventDefault();run("eq")}else if(k==="Backspace")run("del");else if(k==="Escape")run("ac");else if(k==="P")put("π");else if(/^[a-zA-Z]$/.test(k)&&!e.ctrlKey&&!e.metaKey&&!e.altKey)put(k);else if(k==="ArrowLeft")run("left");else if(k==="ArrowRight")run("right");else if(k==="ArrowUp")run("up");else if(k==="ArrowDown")run("down");else return;
+ forced=null;err=false;show()});
+/* ---------- Tools ---------- */
+const TABS={Const:tConst,Conv:tConvN,Units:tConv,Stats:tStats,Complex:tComplex,Matrix:tMatrix,Vector:tVector,Base:tBase,Solve:tSolve,Table:tTable,Graph:tGraph,Coord:tCoord,Display:tDisp};
+function tools(tab){if(!TABS[tab])tab="Const";const w=document.createElement("div"),bar=document.createElement("div"),body=document.createElement("div");bar.className="tabs";body.className="tb";
+ Object.keys(TABS).forEach(n=>{const b=document.createElement("button");b.textContent=n;if(n===tab)b.className="on";b.onclick=()=>tools(n);bar.appendChild(b)});w.append(bar,body);TABS[tab](body);openOv(tab==="Display"?"SETUP":"Tools",w)}
+function outRows(box,rows){box.innerHTML="";rows.forEach(([a,b])=>{const d=document.createElement("div");d.innerHTML="<span></span><span></span>";d.children[0].textContent=a;d.children[1].textContent=b;box.appendChild(d)})}
+const gv=(b,id)=>parseFloat(b.querySelector("#"+id).value);
+const CONST=[["mp","Proton mass",1.67262192369e-27,"kg"],["mn","Neutron mass",1.67492749804e-27,"kg"],["me","Electron mass",9.1093837015e-31,"kg"],["mμ","Muon mass",1.883531627e-28,"kg"],["a0","Bohr radius",5.29177210903e-11,"m"],["h","Planck constant",6.62607015e-34,"J·s"],["μN","Nuclear magneton",5.0507837461e-27,"J/T"],["μB","Bohr magneton",9.2740100783e-24,"J/T"],["ħ","Dirac constant",1.054571817e-34,"J·s"],["α","Fine-structure constant",7.2973525693e-3,""],["re","Classical electron radius",2.8179403262e-15,"m"],["λc","Compton wavelength",2.42631023867e-12,"m"],["γp","Proton gyromagnetic ratio",2.6752218744e8,"1/s·T"],["λc,p","Proton Compton wavelength",1.32140985539e-15,"m"],["λc,n","Neutron Compton wavelength",1.31959090581e-15,"m"],["R∞","Rydberg constant",10973731.56816,"1/m"],["u","Atomic mass unit",1.66053906660e-27,"kg"],["μp","Proton magnetic moment",1.41060679736e-26,"J/T"],["μe","Electron magnetic moment",-9.2847647043e-24,"J/T"],["μn","Neutron magnetic moment",-9.6623651e-27,"J/T"],["μμ","Muon magnetic moment",-4.4904483e-26,"J/T"],["F","Faraday constant",96485.33212,"C/mol"],["e","Elementary charge",1.602176634e-19,"C"],["NA","Avogadro constant",6.02214076e23,"1/mol"],["k","Boltzmann constant",1.380649e-23,"J/K"],["Vm","Molar volume (STP)",0.02241396954,"m³/mol"],["R","Gas constant",8.314462618,"J/mol·K"],["C0","Speed of light",299792458,"m/s"],["C1","First radiation constant",3.741771852e-16,"W·m²"],["C2","Second radiation constant",0.01438776877,"m·K"],["σ","Stefan–Boltzmann",5.670374419e-8,"W/m²K⁴"],["ε0","Permittivity",8.8541878128e-12,"F/m"],["μ0","Permeability",1.25663706212e-6,"N/A²"],["φ0","Magnetic flux quantum",2.067833848e-15,"Wb"],["g","Standard gravity",9.80665,"m/s²"],["G0","Conductance quantum",7.748091729e-5,"S"],["Z0","Vacuum impedance",376.730313668,"Ω"],["t","Celsius temperature",273.15,"K"],["G","Gravitation constant",6.6743e-11,"m³/kg·s²"],["atm","Standard atmosphere",101325,"Pa"]];
+function tConst(b){b.innerHTML='<label>CONST number: type two digits, 01 to 40</label><input id="cn" inputmode="numeric" maxlength="2" placeholder="01"><div id="cl"></div>';
+ const L=b.querySelector("#cl"),pick=i=>{put("("+sciStr(CONST[i][2].toExponential(12).replace(/\.?0+e/,"e"))+")");closeOv();show()};
+ CONST.forEach(([s,n,v,u],i)=>{const r=document.createElement("button");r.className="row";r.innerHTML="<span></span><small></small>";r.children[0].textContent=String(i+1).padStart(2,"0")+"  "+s+"  "+n;r.children[1].textContent=v.toExponential(5)+" "+u;r.onclick=()=>pick(i);L.appendChild(r)});
+ b.querySelector("#cn").oninput=e=>{const n=parseInt(e.target.value,10);if(e.target.value.length===2&&n>=1&&n<=40)pick(n-1)}}
+const CVP=[["in","cm",2.54],["ft","m",.3048],["yd","m",.9144],["mile","km",1.609344],["n mile","m",1852],["acre","m²",4046.8564224],["gal(US)","ℓ",3.785411784],["gal(UK)","ℓ",4.54609],["pc","km",3.0856775814913673e13],["km/h","m/s",1/3.6],["oz","g",28.349523125],["lb","kg",.45359237],["atm","Pa",101325],["mmHg","Pa",133.322387415],["hp","kW",.7456998716],["kgf/cm²","Pa",98066.5],["kgf·m","J",9.80665],["lbf/in²","kPa",6.894757293168],["°F","°C",[v=>(v-32)*5/9,v=>v*9/5+32]],["J","cal",1/4.184]];
+const CV=CVP.flatMap(([a,b,f])=>typeof f==="number"?[[a+" → "+b,v=>v*f],[b+" → "+a,v=>v/f]]:[[a+" → "+b,f[0]],[b+" → "+a,f[1]]]);
+function tConvN(b){const v0=cur();b.innerHTML='<label>CONV number: type two digits, 01 to 40. It converts the value on the screen ('+(v0===null||Array.isArray(v0)?"none":N6(v0))+').</label><input id="cn" inputmode="numeric" maxlength="2" placeholder="01"><div id="cl"></div>';
+ const L=b.querySelector("#cl"),pick=i=>{const v=cur();if(v===null||Array.isArray(v)){toast("Type a number first");return}const r=CV[i][1](v);lastVal=r;ex=normStr(r);pos=ex.length;fresh=true;closeOv();show()};
+ CV.forEach(([n],i)=>{const r=document.createElement("button");r.className="row";r.textContent=String(i+1).padStart(2,"0")+"   "+n;r.onclick=()=>pick(i);L.appendChild(r)});
+ b.querySelector("#cn").oninput=e=>{const n=parseInt(e.target.value,10);if(e.target.value.length===2&&n>=1&&n<=40)pick(n-1)}}
+const UN={Length:{m:1,km:1e3,cm:.01,mm:.001,mile:1609.344,yard:.9144,foot:.3048,inch:.0254,"nautical mi":1852},Mass:{kg:1,g:.001,mg:1e-6,tonne:1e3,lb:.45359237,oz:.028349523125},Time:{s:1,ms:.001,min:60,hour:3600,day:86400,week:604800,year:31557600},Speed:{"m/s":1,"km/h":1/3.6,mph:.44704,knot:1852/3600},Area:{"m²":1,"km²":1e6,hectare:1e4,acre:4046.8564224,"ft²":.09290304},Volume:{litre:1,mL:.001,"m³":1e3,"gal (US)":3.785411784,cup:.2365882365},Data:{byte:1,bit:.125,KB:1024,MB:1048576,GB:1073741824,TB:1099511627776},Energy:{J:1,kJ:1e3,cal:4.184,kcal:4184,kWh:3.6e6},Pressure:{Pa:1,kPa:1e3,bar:1e5,atm:101325,psi:6894.757},Force:{N:1,kN:1e3,kgf:9.80665,lbf:4.4482216},Power:{W:1,kW:1e3,hp:745.6998716},Temperature:{"°C":1,"°F":1,K:1}};
+function tConv(b){b.innerHTML='<label>Category</label><select id="cc"></select><div class="g2"><div><label>From</label><select id="cf"></select></div><div><label>To</label><select id="ct"></select></div></div><label>Value</label><input id="cv" type="number" inputmode="decimal" value="1"><div class="out" id="co"></div><button class="btn p" id="cu" style="margin-top:12px">Use result in calculator</button>';
+ const cc=b.querySelector("#cc"),cf=b.querySelector("#cf"),ct=b.querySelector("#ct"),cv=b.querySelector("#cv"),co=b.querySelector("#co");let res=0;
+ Object.keys(UN).forEach(k=>cc.add(new Option(k,k)));
+ const fill=()=>{[cf,ct].forEach((s,j)=>{s.innerHTML="";Object.keys(UN[cc.value]).forEach(u=>s.add(new Option(u,u)));s.selectedIndex=j?Math.min(1,s.options.length-1):0});go()};
+ const toC=(v,u)=>u==="°C"?v:u==="°F"?(v-32)*5/9:v-273.15,fromC=(c,u)=>u==="°C"?c:u==="°F"?c*9/5+32:c+273.15;
+ function go(){const v=parseFloat(cv.value);if(isNaN(v)){outRows(co,[["Result","—"]]);return}
+  res=cc.value==="Temperature"?fromC(toC(v,cf.value),ct.value):v*UN[cc.value][cf.value]/UN[cc.value][ct.value];outRows(co,[[v+" "+cf.value,N6(res)+" "+ct.value]])}
+ cc.onchange=fill;cf.onchange=ct.onchange=cv.oninput=go;b.querySelector("#cu").onclick=()=>{put(normStr(res));closeOv();show()};fill()}
+const q4=a=>{const n=a.length,med=x=>{const m=x.length;return m%2?x[(m-1)/2]:(x[m/2-1]+x[m/2])/2};return[med(a.slice(0,Math.floor(n/2))),med(a),med(a.slice(Math.ceil(n/2)))]};
+function tStats(b){b.innerHTML='<label>Mode</label><select id="sm"><option value="1">1-variable</option><option value="2">A+BX (linear)</option><option value="3">_+CX² (quadratic)</option><option value="4">In X (logarithmic)</option><option value="5">e^X (A·e^BX)</option><option value="6">A·B^X (ab)</option><option value="7">A·X^B (power)</option><option value="8">1/X (A+B/X)</option></select><label>X values (spaces, commas or lines)</label><textarea id="sx" rows="2">1 2 3 4 5</textarea><div id="syw" style="display:none"><label>Y values</label><textarea id="sy" rows="2">2.1 3.9 6.2 7.8 10.1</textarea><label>Estimate ŷ for x =</label><input id="se" type="number" value="6"></div><div class="out" id="so"></div>';
+ const P=id=>b.querySelector("#"+id).value.split(/[\s,;]+/).filter(Boolean).map(Number).filter(x=>!isNaN(x));
+ const go=()=>{const sv=b.querySelector("#sm").value,two=sv!=="1";b.querySelector("#syw").style.display=two?"block":"none";const o=b.querySelector("#so"),a=P("sx");if(!a.length){outRows(o,[["Enter numbers","—"]]);return}
+  const n=a.length,s=a.reduce((p,q)=>p+q,0),m=s/n,ss=a.reduce((p,q)=>p+(q-m)**2,0);
+  if(!two){const so=[...a].sort((p,q)=>p-q),[q1,md,q3]=q4(so),cnt={};a.forEach(x=>cnt[x]=(cnt[x]||0)+1);const mx=Math.max(...Object.values(cnt));
+   outRows(o,[["n",n],["Σx",N6(s)],["Σx²",N6(a.reduce((p,q)=>p+q*q,0))],["x̄ (mean)",N6(m)],["σx (population)",N6(Math.sqrt(ss/n))],["sx (sample)",n>1?N6(Math.sqrt(ss/(n-1))):"—"],["Min",so[0]],["Q1",N6(q1)],["Median",N6(md)],["Q3",N6(q3)],["Max",so[n-1]],["Mode",mx>1?Object.keys(cnt).filter(k=>cnt[k]===mx).join(", "):"none"]]);return}
+  const Y=P("sy");if(Y.length!==n){outRows(o,[["X and Y need the same count","—"]]);return}const xe=gv(b,"se"),sm=v=>v.reduce((p,q)=>p+q,0),my=sm(Y)/n,L=Math.log,I=x=>x;let rows;
+  if(sv==="3"){const S=k=>sm(a.map(q=>q**k)),c=gauss([[n,S(1),S(2),sm(Y)],[S(1),S(2),S(3),sm(a.map((q,i)=>q*Y[i]))],[S(2),S(3),S(4),sm(a.map((q,i)=>q*q*Y[i]))]]);if(!c){outRows(o,[["Cannot fit","—"]]);return}
+   rows=[["A",N6(c[0])],["B",N6(c[1])],["C",N6(c[2])],["ŷ at x="+xe,N6(c[0]+c[1]*xe+c[2]*xe*xe)]]}
+  else{const[fx,fy]={2:[I,I],4:[L,I],5:[I,L],6:[I,L],7:[L,L],8:[x=>1/x,I]}[sv],X=a.map(fx),Z=Y.map(fy),mx=sm(X)/n,mz=sm(Z)/n,sxx=sm(X.map(q=>(q-mx)**2)),szz=sm(Z.map(q=>(q-mz)**2)),sxz=sm(X.map((q,i)=>(q-mx)*(Z[i]-mz))),b1=sxz/sxx,a1=mz-b1*mx;let A=a1,B=b1,yh;
+   if(sv==="2")yh=A+B*xe;else if(sv==="4")yh=A+B*L(xe);else if(sv==="5"){A=Math.exp(a1);yh=A*Math.exp(B*xe)}else if(sv==="6"){A=Math.exp(a1);B=Math.exp(b1);yh=A*B**xe}else if(sv==="7"){A=Math.exp(a1);yh=A*xe**B}else yh=A+B/xe;
+   rows=[["A",N6(A)],["B",N6(B)],["r (correlation)",N6(sxz/Math.sqrt(sxx*szz))],["ŷ at x="+xe,N6(yh)]]}
+  outRows(o,[["n",n],["x̄",N6(m)],["ȳ",N6(my)],["Σxy",N6(sm(a.map((q,i)=>q*Y[i])))],...rows])};
+ b.querySelectorAll("textarea,input,select").forEach(i=>{i.oninput=go;i.onchange=go});go()}
+const cs=(r,i)=>(Math.abs(r)<1e-12?"0":N6(r))+(i<0?" − ":" + ")+N6(Math.abs(i))+"i";
+function tComplex(b){b.innerHTML='<label>z₁ = a + bi</label><div class="g2"><input id="a1" type="number" value="3"><input id="b1" type="number" value="4"></div><label>z₂ = c + di</label><div class="g2"><input id="a2" type="number" value="1"><input id="b2" type="number" value="-2"></div><div class="out" id="o"></div><small>Tip: MODE → CMPLX lets you type these directly on the main screen using i.</small>';
+ const go=()=>{const[a,e,c,d]=["a1","b1","a2","b2"].map(i=>gv(b,i)),o=b.querySelector("#o");if([a,e,c,d].some(isNaN)){outRows(o,[["Enter all values","—"]]);return}
+  const r=Math.hypot(a,e),th=Math.atan2(e,a),den=c*c+d*d,m=Math.sqrt(r);
+  outRows(o,[["z₁ + z₂",cs(a+c,e+d)],["z₁ − z₂",cs(a-c,e-d)],["z₁ × z₂",cs(a*c-e*d,a*d+e*c)],["z₁ ÷ z₂",den?cs((a*c+e*d)/den,(e*c-a*d)/den):"—"],["|z₁|",N6(r)],["arg z₁ ("+ang+")",N6(fromR(th))],["conj z₁",cs(a,-e)],["z₁²",cs(a*a-e*e,2*a*e)],["√z₁",cs(m*Math.cos(th/2),m*Math.sin(th/2))],["r∠θ",N6(r)+" ∠ "+N6(fromR(th))],["e^z₁",cs(Math.exp(a)*Math.cos(e),Math.exp(a)*Math.sin(e))],["ln z₁",r?cs(Math.log(r),th):"—"]])};
+ b.querySelectorAll("input").forEach(i=>i.oninput=go);go()}
+function det(M){const n=M.length;if(n===1)return M[0][0];if(n===2)return M[0][0]*M[1][1]-M[0][1]*M[1][0];let d=0;for(let j=0;j<n;j++)d+=(j%2?-1:1)*M[0][j]*det(M.slice(1).map(r=>r.filter((_,k)=>k!==j)));return d}
+function inv(M){const n=M.length,A=M.map((r,i)=>[...r,...Array.from({length:n},(_,j)=>+(i===j))]);for(let i=0;i<n;i++){let p=i;for(let k=i+1;k<n;k++)if(Math.abs(A[k][i])>Math.abs(A[p][i]))p=k;if(Math.abs(A[p][i])<1e-12)return null;[A[i],A[p]]=[A[p],A[i]];const t=A[i][i];A[i]=A[i].map(x=>x/t);for(let k=0;k<n;k++)if(k!==i){const f=A[k][i];A[k]=A[k].map((x,j)=>x-f*A[i][j])}}return A.map(r=>r.slice(n))}
+function tMatrix(b){let n=2;
+ const draw=()=>{const cellh=(p)=>Array.from({length:n*n},(_,i)=>'<input type="number" id="'+p+i+'" value="'+(p==="A"?[1,2,3,4,5,6,7,8,10][i]:+(Math.floor(i/n)===i%n))+'">').join("");
+  b.innerHTML='<label>Size</label><select id="mn"><option value="2">2 × 2</option><option value="3">3 × 3</option></select><label>Matrix A</label><div class="mg" style="grid-template-columns:repeat('+n+',1fr)">'+cellh("A")+'</div><label>Matrix B</label><div class="mg" style="grid-template-columns:repeat('+n+',1fr)">'+cellh("B")+'</div><label>Operation</label><select id="mo"><option value="add">A + B</option><option value="sub">A − B</option><option value="mul">A × B</option><option value="detA">det A</option><option value="detB">det B</option><option value="invA">A⁻¹</option><option value="trA">Aᵀ</option><option value="sq">A²</option></select><div class="out" id="mr"></div>';
+  b.querySelector("#mn").value=n;b.querySelector("#mn").onchange=e=>{n=+e.target.value;draw()};b.querySelectorAll("input,#mo").forEach(i=>{i.oninput=go;i.onchange=go});go()};
+ const rd=p=>Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>gv(b,p+(i*n+j))));
+ const mul=(X,Y)=>X.map(r=>Y[0].map((_,j)=>r.reduce((s,v,k)=>s+v*Y[k][j],0)));
+ function go(){const A=rd("A"),B=rd("B"),o=b.querySelector("#mr"),op=b.querySelector("#mo").value;if([...A,...B].flat().some(isNaN)){outRows(o,[["Enter all values","—"]]);return}
+  let R;if(op==="add")R=A.map((r,i)=>r.map((v,j)=>v+B[i][j]));else if(op==="sub")R=A.map((r,i)=>r.map((v,j)=>v-B[i][j]));else if(op==="mul")R=mul(A,B);else if(op==="sq")R=mul(A,A);else if(op==="trA")R=A[0].map((_,j)=>A.map(r=>r[j]));
+  else if(op==="invA"){R=inv(A);if(!R){outRows(o,[["Singular matrix","no inverse"]]);return}}else{outRows(o,[[op==="detA"?"det A":"det B",N6(det(op==="detA"?A:B))]]);return}
+  outRows(o,R.map((r,i)=>["Row "+(i+1),r.map(N6).join("   ")]))}
+ draw()}
+function tVector(b){b.innerHTML='<label>Vector A (x, y, z)</label><div class="g3"><input id="v1" type="number" value="1"><input id="v2" type="number" value="2"><input id="v3" type="number" value="3"></div><label>Vector B (x, y, z)</label><div class="g3"><input id="w1" type="number" value="4"><input id="w2" type="number" value="5"><input id="w3" type="number" value="6"></div><div class="out" id="o"></div>';
+ const go=()=>{const A=["v1","v2","v3"].map(i=>gv(b,i)),B=["w1","w2","w3"].map(i=>gv(b,i)),o=b.querySelector("#o");if([...A,...B].some(isNaN)){outRows(o,[["Enter all values","—"]]);return}
+  const dot=A.reduce((s,v,i)=>s+v*B[i],0),mA=Math.hypot(...A),mB=Math.hypot(...B),t=v=>"("+v.map(N6).join(", ")+")";
+  outRows(o,[["A + B",t(A.map((v,i)=>v+B[i]))],["A − B",t(A.map((v,i)=>v-B[i]))],["A · B",N6(dot)],["A × B",t([A[1]*B[2]-A[2]*B[1],A[2]*B[0]-A[0]*B[2],A[0]*B[1]-A[1]*B[0]])],["|A|",N6(mA)],["|B|",N6(mB)],["Unit A",mA?t(A.map(v=>v/mA)):"—"],["Unit B",mB?t(B.map(v=>v/mB)):"—"],["Angle ("+ang+")",mA&&mB?N6(fromR(Math.acos(Math.max(-1,Math.min(1,dot/(mA*mB)))))):"—"]])};
+ b.querySelectorAll("input").forEach(i=>i.oninput=go);go()}
+function tBase(b){b.innerHTML='<label>Number A</label><input id="bn" value="255"><label>Entered in base</label><select id="bb"><option value="10">Decimal (10)</option><option value="2">Binary (2)</option><option value="8">Octal (8)</option><option value="16">Hexadecimal (16)</option></select><label>Operation</label><select id="bo2"><option value="">None</option><option value="and">A AND B</option><option value="or">A OR B</option><option value="xor">A XOR B</option><option value="not">NOT A</option><option value="shl">A shift left B</option><option value="shr">A shift right B</option></select><label>Number B (same base)</label><input id="bm" value="15"><div class="out" id="bo"></div><small>Tip: MODE → BASE-N gives a full base calculator on the main screen.</small>';
+ const go=()=>{const bs=+b.querySelector("#bb").value,A=parseInt(b.querySelector("#bn").value.trim(),bs),B=parseInt(b.querySelector("#bm").value.trim(),bs),op=b.querySelector("#bo2").value,o=b.querySelector("#bo");
+  if(isNaN(A)){outRows(o,[["Invalid number","—"]]);return}let R=A;if(op){if(op!=="not"&&isNaN(B)){outRows(o,[["Invalid B","—"]]);return}R=op==="and"?A&B:op==="or"?A|B:op==="xor"?A^B:op==="not"?~A:op==="shl"?A<<B:A>>B}
+  const u=R<0?R>>>0:R;outRows(o,[["Binary",u.toString(2)],["Octal",u.toString(8)],["Decimal",String(R)],["Hex",u.toString(16).toUpperCase()]])};
+ b.querySelectorAll("input,select").forEach(i=>{i.oninput=go;i.onchange=go});go()}
+function polyRoots(c){const n=c.length-1,A=c.map(x=>x/c[0]),m=(p,q)=>[p[0]*q[0]-p[1]*q[1],p[0]*q[1]+p[1]*q[0]];let R=[],z=[1,0];for(let i=0;i<n;i++){R.push(z);z=m(z,[.4,.9])}
+ for(let it=0;it<200;it++){R=R.map((r,i)=>{let p=[1,0];for(let k=1;k<=n;k++){const t=m(p,r);p=[t[0]+A[k],t[1]]}let d=[1,0];R.forEach((s,j)=>{if(j!==i)d=m(d,[r[0]-s[0],r[1]-s[1]])});const q=d[0]*d[0]+d[1]*d[1]||1e-30,dv=[(p[0]*d[0]+p[1]*d[1])/q,(p[1]*d[0]-p[0]*d[1])/q];return[r[0]-dv[0],r[1]-dv[1]]})}
+ return R.map(r=>[Math.abs(r[0])<1e-9?0:r[0],Math.abs(r[1])<1e-9?0:r[1]])}
+function gauss(M){const n=M.length;for(let i=0;i<n;i++){let p=i;for(let k=i+1;k<n;k++)if(Math.abs(M[k][i])>Math.abs(M[p][i]))p=k;if(Math.abs(M[p][i])<1e-12)return null;[M[i],M[p]]=[M[p],M[i]];for(let k=0;k<n;k++)if(k!==i){const f=M[k][i]/M[i][i];M[k]=M[k].map((x,j)=>x-f*M[i][j])}}return M.map((r,i)=>r[n]/r[i])}
+function tSolve(b){b.innerHTML='<label>Type</label><select id="st"><option value="p2">Quadratic  ax² + bx + c = 0</option><option value="p3">Cubic  ax³ + bx² + cx + d = 0</option><option value="s2">2 equations, 2 unknowns</option><option value="s3">3 equations, 3 unknowns</option></select><div id="si"></div><div class="out" id="so"></div>';
+ const def={p2:[1,-3,2],p3:[1,-6,11,-6],s2:[2,1,5,1,-1,1],s3:[1,1,1,6,2,-1,1,1,1,-1,3,5]};
+ const draw=()=>{const t=b.querySelector("#st").value,cols=t[0]==="p"?def[t].length:+t[1]+1;
+  b.querySelector("#si").innerHTML='<div class="mg" style="grid-template-columns:repeat('+cols+',1fr);margin-top:8px">'+def[t].map((v,i)=>'<input type="number" value="'+v+'" data-i="'+i+'">').join("")+"</div>"+(t[0]==="s"?"<small>Each row: coefficients then constant.</small>":"");
+  b.querySelectorAll("#si input").forEach(i=>i.oninput=go);go()};
+ function go(){const t=b.querySelector("#st").value,v=[...b.querySelectorAll("#si input")].map(i=>parseFloat(i.value)),o=b.querySelector("#so");if(v.some(isNaN)){outRows(o,[["Enter all values","—"]]);return}
+  if(t[0]==="p"){if(v[0]===0){outRows(o,[["Leading coefficient","cannot be 0"]]);return}const R=polyRoots(v);outRows(o,R.map((r,i)=>["x"+(i+1),cs(r[0],r[1]).replace(/ \+ 0i$/,"")]))}
+  else{const n=+t[1],M=Array.from({length:n},(_,i)=>v.slice(i*(n+1),i*(n+1)+n+1)),S=gauss(M);outRows(o,S?S.map((x,i)=>["xyz"[i],N6(x)]):[["No unique solution","—"]])}}
+ b.querySelector("#st").onchange=draw;draw()}
+function tTable(b){b.innerHTML='<label>f(x) =</label><input id="tf" value="x^2+1"><div class="g3"><div><label>Start</label><input id="t1" type="number" value="1"></div><div><label>End</label><input id="t2" type="number" value="10"></div><div><label>Step</label><input id="t3" type="number" value="1"></div></div><button class="btn p" id="tg" style="margin-top:10px">Make table</button><div class="out" id="to"></div>';
+ const go=()=>{const f=b.querySelector("#tf").value,a=gv(b,"t1"),e=gv(b,"t2"),s=gv(b,"t3"),o=b.querySelector("#to");if([a,e,s].some(isNaN)||s<=0||(e-a)/s>40){outRows(o,[["Check start, end, step","(max 40 rows)"]]);return}
+  const rows=[],ox=V.x,om=mode;mode="COMP";for(let x=a;x<=e+1e-12;x+=s){V.x=x;let y;try{y=N6(chk(calc(f)))}catch(er){y="—"}rows.push(["x = "+N6(x),y])}V.x=ox;mode=om;outRows(o,rows)};
+ b.querySelector("#tg").onclick=go;go()}
+function tGraph(b){b.innerHTML='<label>y = f(x)</label><input id="gf" value="sin(x)"><div class="g2"><div><label>x min</label><input id="g1" type="number" value="-10"></div><div><label>x max</label><input id="g2" type="number" value="10"></div></div><canvas id="gc" width="360" height="260" style="width:100%;margin-top:10px;border:1px solid var(--bd);border-radius:12px;background:var(--card)"></canvas><small>Uses the current angle unit (DEG / RAD / GRAD).</small>';
+ const go=()=>{const f=b.querySelector("#gf").value,a=gv(b,"g1"),z=gv(b,"g2"),c=b.querySelector("#gc"),g=c.getContext("2d"),W=c.width,H=c.height,ink=getComputedStyle(document.body).color;g.clearRect(0,0,W,H);if(isNaN(a)||isNaN(z)||z<=a)return;
+  const om=mode,ox=V.x,P=[];let lo=1/0,hi=-1/0;mode="COMP";for(let i=0;i<=W;i++){V.x=a+(z-a)*i/W;let y=NaN;try{y=chk(calc(f))}catch(er){}P.push(y);if(isFinite(y)){lo=Math.min(lo,y);hi=Math.max(hi,y)}}V.x=ox;mode=om;
+  if(!isFinite(lo))return;if(lo===hi){lo-=1;hi+=1}const pd=(hi-lo)*.08;lo-=pd;hi+=pd;const X=x=>(x-a)/(z-a)*W,Y=y=>H-(y-lo)/(hi-lo)*H;
+  g.strokeStyle=ink;g.globalAlpha=.35;g.lineWidth=1;g.beginPath();if(a<0&&z>0){g.moveTo(X(0),0);g.lineTo(X(0),H)}if(lo<0&&hi>0){g.moveTo(0,Y(0));g.lineTo(W,Y(0))}g.stroke();g.globalAlpha=1;
+  g.strokeStyle="#4b5bd6";g.lineWidth=2;g.beginPath();let pen=false,pv=0;P.forEach((y,i)=>{if(!isFinite(y)){pen=false;return}if(pen&&Math.abs(y-pv)<(hi-lo)*.6)g.lineTo(i,Y(y));else g.moveTo(i,Y(y));pen=true;pv=y});g.stroke();
+  g.fillStyle=ink;g.font="11px sans-serif";g.fillText("y from "+N6(lo)+" to "+N6(hi),6,12)};
+ b.querySelectorAll("input").forEach(i=>i.oninput=go);go()}
+function tCoord(b){b.innerHTML='<label>Pol: x, y → r, θ (current angle unit)</label><div class="g2"><input id="px" type="number" value="3"><input id="py" type="number" value="4"></div><div class="out" id="po"></div><label>Rec: r, θ → x, y</label><div class="g2"><input id="rr" type="number" value="5"><input id="rt" type="number" value="53.13"></div><div class="out" id="ro"></div><label>Decimal degrees → D°M′S″</label><input id="dd" type="number" value="12.5875"><div class="out" id="do"></div><label>D, M, S → decimal degrees</label><div class="g3"><input id="d1" type="number" value="12"><input id="d2" type="number" value="35"><input id="d3" type="number" value="15"></div><div class="out" id="dq"></div>';
+ const go=()=>{const x=gv(b,"px"),y=gv(b,"py"),r=gv(b,"rr"),t=gv(b,"rt");
+  outRows(b.querySelector("#po"),[["r",N6(Math.hypot(x,y))],["θ ("+ang+")",N6(fromR(Math.atan2(y,x)))]]);
+  outRows(b.querySelector("#ro"),[["x",N6(r*Math.cos(toR(t)))],["y",N6(r*Math.sin(toR(t)))]]);
+  const d=gv(b,"dd");outRows(b.querySelector("#do"),isNaN(d)?[["Enter degrees","—"]]:[["D°M′S″",dmsStr(d)]]);
+  const[p,q,s]=["d1","d2","d3"].map(i=>gv(b,i));outRows(b.querySelector("#dq"),[p,q,s].some(isNaN)?[["Enter D, M, S","—"]]:[["Degrees",N6(p+q/60+s/3600)]])};
+ b.querySelectorAll("input").forEach(i=>i.oninput=go);go()}
+function tDisp(b){b.innerHTML='<label>Number format</label><select id="fm"><option value="n1">Norm 1</option><option value="n2">Norm 2</option><option value="fix">Fix (fixed decimals)</option><option value="sci">Sci (scientific)</option></select><label>Decimal places (Fix / Sci)</label><select id="fn"></select><label>Engineering notation</label><select id="fe"><option value="0">Off</option><option value="1">On</option></select><label>Angle unit</label><select id="fa"><option value="deg">Degrees</option><option value="rad">Radians</option><option value="grad">Gradians</option></select><label>Result display</label><select id="ff"><option value="0">LineIO (decimals)</option><option value="1">MthIO fractions (d/c)</option><option value="2">MthIO fractions (a b/c)</option></select><label>Complex result</label><select id="fc"><option value="0">a + bi</option><option value="1">r ∠ θ</option></select><label>Key vibration</label><select id="fv"><option value="0">Off</option><option value="1">On</option></select>';
+ for(let i=0;i<=10;i++)b.querySelector("#fn").add(new Option(i,i));
+ const q=id=>b.querySelector("#"+id);q("fm").value=fmtMode==="norm"?(normTwo?"n2":"n1"):fmtMode;q("fn").value=fmtN;q("fe").value=+eng;q("fa").value=ang;q("ff").value=fracOn?(fracMixed?2:1):0;q("fc").value=+cpolar;q("fv").value=+vib;
+ b.querySelectorAll("select").forEach(s=>s.onchange=()=>{const m=q("fm").value;fmtMode=m==="n1"||m==="n2"?"norm":m;normTwo=m==="n2";fmtN=+q("fn").value;eng=q("fe").value==="1";ang=q("fa").value;fracOn=q("ff").value!=="0";fracMixed=q("ff").value==="2";cpolar=q("fc").value==="1";vib=q("fv").value==="1";save();show()})}
+show();
+</script></body></html>
